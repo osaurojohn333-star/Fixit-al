@@ -1,36 +1,196 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FixIt AI</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 25px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      color: #d1d5db;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    textarea {
+      width: 100%;
+      height: 130px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 14px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    #answer {
+      margin-top: 20px;
+      padding: 18px;
+      background: #eef6ff;
+      border-radius: 10px;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .example {
+      margin-top: 15px;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>🔧 FixIt AI</h1>
-  <p>Describe your problem and get simple troubleshooting help.</p>
 
-  <input type="text" id="problem" placeholder="What problem are you having?">
-  <button onclick="getHelp()">Get Help</button>
+  <header>
+    <h1>🔧 FixIt AI</h1>
+    <p>Describe your problem and get simple troubleshooting help.</p>
+  </header>
 
-  <p id="answer"></p>
+  <div class="container">
+    <div class="card">
+
+      <h2>What's wrong?</h2>
+
+      <textarea id="problem"
+        placeholder="Example: My phone is charging slowly..."></textarea>
+
+      <button onclick="fixProblem()">Fix It</button>
+
+      <div id="answer"></div>
+
+      <div class="example">
+        Try problems like: phone not charging, TV has no picture,
+        Wi-Fi not working, or computer not turning on.
+      </div>
+
+    </div>
+  </div>
 
   <script>
-    function getHelp() {
-      let problem = document.getElementById("problem").value.toLowerCase();
-      let answer = document.getElementById("answer");
+    function fixProblem() {
 
-      if (problem.includes("phone") || problem.includes("charging")) {
-        answer.innerText =
-          "Try another charger and power outlet. Clean the charging port carefully. If it still does not charge, contact a technician.";
-      } else if (problem.includes("wifi") || problem.includes("internet")) {
-        answer.innerText =
-          "Restart your router, check the cables, and reconnect your phone to Wi-Fi.";
-      } else if (problem.includes("computer") || problem.includes("laptop")) {
-        answer.innerText =
-          "Restart the computer and check the power and internet connection. If the problem continues, describe the error.";
-      } else {
-        answer.innerText =
-          "Please describe the problem in more detail so FixIt AI can help.";
+      const problem = document.getElementById("problem").value.toLowerCase();
+      const answer = document.getElementById("answer");
+
+      if (problem.trim() === "") {
+        answer.style.display = "block";
+        answer.innerHTML = "⚠️ Please describe the problem first.";
+        return;
       }
+
+      let solution = "";
+
+      if (problem.includes("charge") || problem.includes("charging")) {
+
+        solution = `
+          <strong>🔋 Possible charging problem</strong><br><br>
+          1. Check whether the charging cable is damaged.<br>
+          2. Try another charging cable or adapter.<br>
+          3. Carefully check the charging port for dust.<br>
+          4. Restart the phone and try charging again.<br>
+          5. If it still does not charge, the charging port or battery may need professional repair.
+        `;
+
+      } else if (problem.includes("wifi") || problem.includes("internet")) {
+
+        solution = `
+          <strong>📶 Possible internet problem</strong><br><br>
+          1. Check that Wi-Fi is switched on.<br>
+          2. Turn Wi-Fi off and on again.<br>
+          3. Restart your router.<br>
+          4. Check whether another device can connect.<br>
+          5. If other devices also have no internet, contact your internet provider.
+        `;
+
+      } else if (problem.includes("tv") || problem.includes("television")) {
+
+        solution = `
+          <strong>📺 Possible TV problem</strong><br><br>
+          1. Check that the TV has power.<br>
+          2. Check the power cable.<br>
+          3. Make sure the correct input/source is selected.<br>
+          4. Restart the TV.<br>
+          5. If there is still no picture, the TV may need professional inspection.
+        `;
+
+      } else if (problem.includes("computer") || problem.includes("laptop")) {
+
+        solution = `
+          <strong>💻 Possible computer problem</strong><br><br>
+          1. Check that the charger is connected properly.<br>
+          2. Try restarting the computer.<br>
+          3. Disconnect unnecessary USB devices.<br>
+          4. Check whether the screen is receiving power.<br>
+          5. If it still will not start, professional diagnosis may be needed.
+        `;
+
+      } else {
+
+        solution = `
+          <strong>🛠️ FixIt AI basic diagnosis</strong><br><br>
+          I need a little more information to diagnose this problem.<br><br>
+          Please describe:<br>
+          • What device or machine is affected?<br>
+          • What exactly is happening?<br>
+          • When did the problem start?<br>
+          • What have you already tried?
+        `;
+      }
+
+      answer.style.display = "block";
+      answer.innerHTML = solution;
     }
   </script>
+
 </body>
 </html>
