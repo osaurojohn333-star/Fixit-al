@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FixIt AI</title>
+</head>
+<body>
+  <h1>🔧 FixIt AI</h1>
+  <p>Describe your problem and get simple troubleshooting help.</p>
+
+  <input type="text" id="problem" placeholder="What problem are you having?">
+  <button onclick="getHelp()">Get Help</button>
+
+  <p id="answer"></p>
+
+  <script>
+    function getHelp() {
+      let problem = document.getElementById("problem").value.toLowerCase();
+      let answer = document.getElementById("answer");
+
+      if (problem.includes("phone") || problem.includes("charging")) {
+        answer.innerText =
+          "Try another charger and power outlet. Clean the charging port carefully. If it still does not charge, contact a technician.";
+      } else if (problem.includes("wifi") || problem.includes("internet")) {
+        answer.innerText =
+          "Restart your router, check the cables, and reconnect your phone to Wi-Fi.";
+      } else if (problem.includes("computer") || problem.includes("laptop")) {
+        answer.innerText =
+          "Restart the computer and check the power and internet connection. If the problem continues, describe the error.";
+      } else {
+        answer.innerText =
+          "Please describe the problem in more detail so FixIt AI can help.";
+      }
+    }
+  </script>
+</body>
+</html>
